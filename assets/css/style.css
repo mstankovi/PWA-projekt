@@ -78,7 +78,7 @@ a {
 
 .main-navigation {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(5, 1fr);
     border-bottom: 1px solid #e7e7e7;
 }
 
@@ -237,6 +237,174 @@ a {
     line-height: 0.75;
 }
 
+.form-content {
+    padding: 32px 30px 48px;
+}
+
+.form-panel {
+    max-width: 850px;
+    margin: 0 auto;
+    border-top: 5px solid var(--newsweek-red);
+    padding-top: 24px;
+}
+
+.form-header {
+    margin-bottom: 28px;
+}
+
+.form-kicker {
+    margin: 0 0 6px;
+    color: var(--newsweek-red);
+    font-size: 14px;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.form-header h1,
+.message-panel h1 {
+    margin: 0 0 10px;
+    font-family: "Arial Narrow", Arial, sans-serif;
+    font-size: 36px;
+    text-transform: uppercase;
+}
+
+.form-header > p:last-child {
+    margin: 0;
+    color: var(--muted-text);
+}
+
+.form-panel form {
+    display: grid;
+    gap: 22px;
+}
+
+.form-item {
+    display: grid;
+    gap: 8px;
+}
+
+.form-item label,
+.checkbox-item label {
+    font-weight: 700;
+}
+
+.form-item label span {
+    color: var(--newsweek-red);
+}
+
+.form-item input[type="text"],
+.form-item input[type="file"],
+.form-item textarea,
+.form-item select {
+    width: 100%;
+    border: 1px solid #999999;
+    border-radius: 0;
+    background: #ffffff;
+    color: var(--text-color);
+    font: inherit;
+}
+
+.form-item input[type="text"],
+.form-item textarea,
+.form-item select {
+    padding: 12px;
+}
+
+.form-item input[type="file"] {
+    padding: 9px;
+}
+
+.form-item textarea {
+    resize: vertical;
+}
+
+.form-item input:focus-visible,
+.form-item textarea:focus-visible,
+.form-item select:focus-visible {
+    border-color: var(--newsweek-red);
+    outline: 2px solid var(--newsweek-red);
+    outline-offset: 2px;
+}
+
+.form-item small {
+    color: var(--muted-text);
+    font-size: 12px;
+}
+
+.checkbox-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.checkbox-item input {
+    width: 18px;
+    height: 18px;
+    margin: 0;
+    accent-color: var(--newsweek-red);
+}
+
+.form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    padding-top: 6px;
+}
+
+.button {
+    display: inline-block;
+    border: 1px solid var(--text-color);
+    border-radius: 0;
+    padding: 11px 22px;
+    font: inherit;
+    font-weight: 700;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.button-primary {
+    border-color: var(--newsweek-red);
+    background: var(--newsweek-red);
+    color: #ffffff;
+}
+
+.button-secondary {
+    background: #ffffff;
+    color: var(--text-color);
+}
+
+.button:hover,
+.button:focus-visible {
+    border-color: var(--text-color);
+    outline: 2px solid var(--text-color);
+    outline-offset: 2px;
+}
+
+.message-panel {
+    max-width: 850px;
+    margin: 20px auto;
+    border-top: 5px solid var(--newsweek-red);
+    padding: 24px 0;
+}
+
+.message-panel p,
+.message-panel ul {
+    margin: 0 0 20px;
+}
+
+.message-panel-error li {
+    margin-bottom: 6px;
+}
+
+.archive-notice {
+    max-width: 900px;
+    margin: 10px 0 18px;
+    border-left: 4px solid var(--newsweek-red);
+    padding: 10px 14px;
+    background: #f4f5f6;
+    font-weight: 700;
+}
+
 .site-footer {
     display: flex;
     justify-content: space-between;
@@ -300,8 +468,13 @@ a {
         grid-template-columns: repeat(2, 1fr);
     }
 
-    .main-navigation a:nth-child(2) {
+    .main-navigation a:nth-child(even) {
         border-right: 0;
+    }
+
+    .main-navigation a:last-child {
+        grid-column: 1 / -1;
+        border-top: 1px solid var(--border-color);
     }
 
     .main-navigation a {
@@ -310,7 +483,8 @@ a {
     }
 
     .home-content,
-    .article-content {
+    .article-content,
+    .form-content {
         padding-right: 18px;
         padding-left: 18px;
     }
@@ -329,6 +503,20 @@ a {
 
     .article-body {
         font-size: 16px;
+    }
+
+    .form-header h1,
+    .message-panel h1 {
+        font-size: 30px;
+    }
+
+    .form-actions {
+        align-items: stretch;
+        flex-direction: column-reverse;
+    }
+
+    .form-actions .button {
+        width: 100%;
     }
 
     .site-footer {

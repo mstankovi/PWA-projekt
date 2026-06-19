@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="hr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Forma za unos nove vijesti na Newsweek portal.">
+    <title>Unos vijesti | Newsweek</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+    <div class="site-wrapper">
+        <header class="site-header">
+            <div class="masthead">
+                <time datetime="2026-06-19">Petak, 19. lipnja 2026.</time>
+                <a class="logo" href="index.html" aria-label="Newsweek početna stranica">Newsweek</a>
+            </div>
+            <nav class="main-navigation" aria-label="Glavna navigacija">
+                <a href="index.html">Početna</a>
+                <a href="index.html#hrvatska">Hrvatska</a>
+                <a href="index.html#svijet">Svijet</a>
+                <a href="unos.html" aria-current="page">Unos</a>
+                <a href="#" aria-disabled="true" title="Dostupno u kasnijoj fazi projekta">Administracija</a>
+            </nav>
+        </header>
+
+        <main class="form-content">
+            <section class="form-panel" aria-labelledby="form-title">
+                <header class="form-header">
+                    <p class="form-kicker">Nova vijest</p>
+                    <h1 id="form-title">Unos sadržaja</h1>
+                    <p>Sva polja označena zvjezdicom obavezno je ispuniti.</p>
+                </header>
+
+                <form name="unos-vijesti" action="skripta.php" method="POST" enctype="multipart/form-data">
+                    <div class="form-item">
+                        <label for="naslov">Naslov <span aria-hidden="true">*</span></label>
+                        <input type="text" name="naslov" id="naslov" maxlength="100" required autofocus>
+                    </div>
+
+                    <div class="form-item">
+                        <label for="sazetak">Kratki sažetak <span aria-hidden="true">*</span></label>
+                        <textarea name="sazetak" id="sazetak" rows="3" maxlength="100" required></textarea>
+                        <small>Najviše 100 znakova.</small>
+                    </div>
+
+                    <div class="form-item">
+                        <label for="tekst">Tekst vijesti <span aria-hidden="true">*</span></label>
+                        <textarea name="tekst" id="tekst" rows="12" required></textarea>
+                    </div>
+
+                    <div class="form-item">
+                        <label for="kategorija">Kategorija <span aria-hidden="true">*</span></label>
+                        <select name="kategorija" id="kategorija" required>
+                            <option value="">Odaberite kategoriju</option>
+                            <option value="Hrvatska">Hrvatska</option>
+                            <option value="Svijet">Svijet</option>
+                        </select>
+                    </div>
+
+                    <div class="form-item">
+                        <label for="slika">Slika <span aria-hidden="true">*</span></label>
+                        <input type="file" name="slika" id="slika" accept="image/jpeg,image/png,image/webp" required>
+                        <small>Dozvoljeni formati: JPEG, PNG i WebP. Najveća veličina: 5 MB.</small>
+                    </div>
+
+                    <div class="checkbox-item">
+                        <input type="checkbox" name="arhiva" id="arhiva" value="1">
+                        <label for="arhiva">Spremi vijest u arhivu</label>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="reset" class="button button-secondary">Poništi</button>
+                        <button type="submit" class="button button-primary">Prihvati</button>
+                    </div>
+                </form>
+            </section>
+        </main>
+
+        <footer class="site-footer">
+            <p>&copy; 2026 Newsweek</p>
+            <p>Mia Stanković · <a href="mailto:msatnkovi@tvz.hr">[msatnkovi@tvz.hr]</a></p>
+        </footer>
+    </div>
+</body>
+</html>
