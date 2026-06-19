@@ -1,5 +1,6 @@
 <?php
 require_once 'connect.php';
+require_once 'auth.php';
 
 $pageTitle = $pageTitle ?? 'Newsweek';
 $navigationCategories = mysqli_query($dbc, 'SELECT id, ime FROM kategorije ORDER BY id');
@@ -27,7 +28,15 @@ $navigationCategories = mysqli_query($dbc, 'SELECT id, ime FROM kategorije ORDER
                         <?= htmlspecialchars($navigationCategory['ime'], ENT_QUOTES, 'UTF-8') ?>
                     </a>
                 <?php endwhile; ?>
-                <a href="unos.php">Unos</a>
                 <a href="administracija.php">Administracija</a>
+                <?php if (korisnikJeAdministrator()): ?>
+                    <a href="unos.php">Unos</a>
+                <?php endif; ?>
+                <?php if (korisnikJePrijavljen()): ?>
+                    <a href="odjava.php">Odjava</a>
+                <?php else: ?>
+                    <a href="prijava.php">Prijava</a>
+                    <a href="registracija.php">Registracija</a>
+                <?php endif; ?>
             </nav>
         </header>

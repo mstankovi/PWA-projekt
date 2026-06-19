@@ -1,8 +1,8 @@
 <?php
-$server = 'localhost';
-$korisnik = 'root';
-$lozinka = '';
-$baza = 'newsweek';
+$server = getenv('DB_HOST') ?: 'localhost';
+$korisnik = getenv('DB_USER') ?: 'root';
+$lozinka = getenv('DB_PASSWORD') ?: '';
+$baza = getenv('DB_NAME') ?: 'newsweek';
 
 $dbc = mysqli_connect($server, $korisnik, $lozinka, $baza);
 

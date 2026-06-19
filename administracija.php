@@ -1,5 +1,8 @@
 <?php
+require_once 'auth.php';
+zahtijevajAdministratora();
 require_once 'connect.php';
+require_once 'upload.php';
 
 $greske = [];
 $selectedId = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
@@ -22,14 +25,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         $deleteStatement = mysqli_prepare($dbc, 'DELETE FROM vijesti WHERE id = ?');
         mysqli_stmt_bind_param($deleteStatement, 'i', $articleId);
-        mysqli_stmt_execute($deleteStatement);
+        if (mysqli_stmt_execute($deleteStatement)) {
+            if ($imageRow) {
+                obrisiUploadanuSliku($imageRow['slika_url']);
+            }
 
-        if ($imageRow && str_starts_with($imageRow['slika_url'], 'assets/uploads/') && is_file($imageRow['slika_url'])) {
-            unlink($imageRow['slika_url']);
+            header('Location: administracija.php?status=deleted');
+            exit;
         }
 
-        header('Location: administracija.php?status=deleted');
-        exit;
+        $greske[] = 'Vijest nije uspješno izbrisana.';
     }
 
     if ($action === 'update') {
@@ -61,27 +66,30 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
         if (!$kategorijaId) {
             $greske[] = 'Potrebno je odabrati kategoriju.';
+        } else {
+            $categoryStatement = mysqli_prepare($dbc, 'SELECT id FROM kategorije WHERE id = ?');
+            mysqli_stmt_bind_param($categoryStatement, 'i', $kategorijaId);
+            mysqli_stmt_execute($categoryStatement);
+            mysqli_stmt_store_result($categoryStatement);
+
+            if (mysqli_stmt_num_rows($categoryStatement) === 0) {
+                $greske[] = 'Odabrana kategorija ne postoji.';
+            }
         }
 
         $putanjaSlike = $staraSlika;
         $novaSlikaSpremljena = false;
 
         if (isset($_FILES['slika']) && $_FILES['slika']['error'] !== UPLOAD_ERR_NO_FILE) {
-            $ekstenzija = strtolower(pathinfo($_FILES['slika']['name'], PATHINFO_EXTENSION));
+            if ($greske === []) {
+                $greskaSlike = '';
+                $novaPutanja = spremiUploadanuSliku($_FILES['slika'], $greskaSlike);
 
-            if ($_FILES['slika']['error'] !== UPLOAD_ERR_OK) {
-                $greske[] = 'Nova slika nije uspješno prenesena.';
-            } elseif (!in_array($ekstenzija, ['jpg', 'jpeg', 'png', 'webp'], true)) {
-                $greske[] = 'Dozvoljene su samo JPEG, PNG i WebP slike.';
-            } elseif ($_FILES['slika']['size'] > 5 * 1024 * 1024) {
-                $greske[] = 'Slika ne smije biti veća od 5 MB.';
-            } elseif ($greske === []) {
-                $putanjaSlike = 'assets/uploads/' . uniqid('vijest_') . '.' . $ekstenzija;
-                $novaSlikaSpremljena = move_uploaded_file($_FILES['slika']['tmp_name'], $putanjaSlike);
-
-                if (!$novaSlikaSpremljena) {
-                    $greske[] = 'Nova slika nije uspješno spremljena.';
-                    $putanjaSlike = $staraSlika;
+                if ($novaPutanja) {
+                    $putanjaSlike = $novaPutanja;
+                    $novaSlikaSpremljena = true;
+                } else {
+                    $greske[] = $greskaSlike;
                 }
             }
         }
@@ -103,16 +111,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $articleId
             );
             if (mysqli_stmt_execute($updateStatement)) {
-                if ($novaSlikaSpremljena && str_starts_with($staraSlika, 'assets/uploads/') && is_file($staraSlika)) {
-                    unlink($staraSlika);
+                if ($novaSlikaSpremljena) {
+                    obrisiUploadanuSliku($staraSlika);
                 }
 
                 header('Location: administracija.php?id=' . $articleId . '&status=updated');
                 exit;
             }
 
-            if ($novaSlikaSpremljena && is_file($putanjaSlike)) {
-                unlink($putanjaSlike);
+            if ($novaSlikaSpremljena) {
+                obrisiUploadanuSliku($putanjaSlike);
             }
             $greske[] = 'Promjene nisu spremljene.';
         }

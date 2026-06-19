@@ -44,6 +44,9 @@ CREATE TABLE vijesti (
         ON UPDATE CASCADE ON DELETE RESTRICT
 ) ENGINE=InnoDB;
 
+INSERT INTO korisnik (ime, prezime, korisnickoIme, lozinka, razina) VALUES
+    ('Admin', 'Newsweek', 'admin', '$2y$10$9BUxPRG9KbRVyYFdizfkoeuHJO7re9p2DjMG4Cjk2WPhNwg7kSn.K', 1);
+
 INSERT INTO kategorije (id, ime) VALUES
     (1, 'Hrvatska'),
     (2, 'Svijet');

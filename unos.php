@@ -1,5 +1,8 @@
 <?php
+require_once 'auth.php';
+zahtijevajAdministratora();
 require_once 'connect.php';
+require_once 'upload.php';
 
 $greske = [];
 $naslov = '';
@@ -29,27 +32,29 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if (!$kategorijaId) {
         $greske[] = 'Potrebno je odabrati kategoriju.';
-    }
-
-    if (!isset($_FILES['slika']) || $_FILES['slika']['error'] !== UPLOAD_ERR_OK) {
-        $greske[] = 'Potrebno je odabrati sliku.';
     } else {
-        $ekstenzija = strtolower(pathinfo($_FILES['slika']['name'], PATHINFO_EXTENSION));
-        $dozvoljeneEkstenzije = ['jpg', 'jpeg', 'png', 'webp'];
+        $categoryStatement = mysqli_prepare($dbc, 'SELECT id FROM kategorije WHERE id = ?');
+        mysqli_stmt_bind_param($categoryStatement, 'i', $kategorijaId);
+        mysqli_stmt_execute($categoryStatement);
+        mysqli_stmt_store_result($categoryStatement);
 
-        if (!in_array($ekstenzija, $dozvoljeneEkstenzije, true)) {
-            $greske[] = 'Dozvoljene su samo JPEG, PNG i WebP slike.';
-        } elseif ($_FILES['slika']['size'] > 5 * 1024 * 1024) {
-            $greske[] = 'Slika ne smije biti veća od 5 MB.';
+        if (mysqli_stmt_num_rows($categoryStatement) === 0) {
+            $greske[] = 'Odabrana kategorija ne postoji.';
         }
     }
 
-    if ($greske === []) {
-        $nazivSlike = uniqid('vijest_') . '.' . $ekstenzija;
-        $putanjaSlike = 'assets/uploads/' . $nazivSlike;
+    if (!isset($_FILES['slika']) || $_FILES['slika']['error'] === UPLOAD_ERR_NO_FILE) {
+        $greske[] = 'Potrebno je odabrati sliku.';
+    } elseif ($_FILES['slika']['error'] !== UPLOAD_ERR_OK) {
+        $greske[] = 'Slika nije uspješno prenesena.';
+    }
 
-        if (!move_uploaded_file($_FILES['slika']['tmp_name'], $putanjaSlike)) {
-            $greske[] = 'Slika nije uspješno spremljena.';
+    if ($greske === []) {
+        $greskaSlike = '';
+        $putanjaSlike = spremiUploadanuSliku($_FILES['slika'], $greskaSlike);
+
+        if (!$putanjaSlike) {
+            $greske[] = $greskaSlike;
         } else {
             $insertQuery = 'INSERT INTO vijesti
                             (naslov, sazetak, tekst, slika_url, idKategorija, arhiva)
@@ -74,9 +79,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 exit;
             }
 
-            if (is_file($putanjaSlike)) {
-                unlink($putanjaSlike);
-            }
+            obrisiUploadanuSliku($putanjaSlike);
             $greske[] = 'Vijest nije uspješno spremljena u bazu.';
         }
     }
