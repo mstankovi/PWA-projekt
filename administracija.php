@@ -114,7 +114,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if ($novaSlikaSpremljena && is_file($putanjaSlike)) {
                 unlink($putanjaSlike);
             }
-            $greske[] = 'Promjene nisu uspješno spremljene.';
+            $greske[] = 'Promjene nisu spremljene.';
         }
 
         $selectedId = $articleId;
@@ -150,8 +150,8 @@ require 'header.php';
 $categories = mysqli_query($dbc, 'SELECT id, ime FROM kategorije ORDER BY id');
 
 $statusMessages = [
-    'updated' => 'Vijest je uspješno izmijenjena.',
-    'deleted' => 'Vijest je uspješno izbrisana.',
+    'updated' => 'Vijest je izmijenjena.',
+    'deleted' => 'Vijest je izbrisana.',
 ];
 $status = $_GET['status'] ?? '';
 ?>
