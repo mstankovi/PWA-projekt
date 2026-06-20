@@ -58,8 +58,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($naslov === '' || mb_strlen($naslov) > 100) {
             $greske[] = 'Naslov je obavezan i smije sadržavati najviše 100 znakova.';
         }
-        if ($sazetak === '' || mb_strlen($sazetak) > 100) {
-            $greske[] = 'Sažetak je obavezan i smije sadržavati najviše 100 znakova.';
+        if ($sazetak === '' || mb_strlen($sazetak) > 255) {
+            $greske[] = 'Sažetak je obavezan i smije sadržavati najviše 255 znakova.';
         }
         if ($tekst === '') {
             $greske[] = 'Tekst vijesti je obavezan.';
@@ -231,7 +231,7 @@ $status = $_GET['status'] ?? '';
 
                 <div class="form-item">
                     <label for="sazetak">Kratki sažetak</label>
-                    <textarea name="sazetak" id="sazetak" rows="3" maxlength="100" required><?= htmlspecialchars($editArticle['sazetak'], ENT_QUOTES, 'UTF-8') ?></textarea>
+                    <textarea name="sazetak" id="sazetak" rows="3" maxlength="255" required><?= htmlspecialchars($editArticle['sazetak'], ENT_QUOTES, 'UTF-8') ?></textarea>
                 </div>
 
                 <div class="form-item">

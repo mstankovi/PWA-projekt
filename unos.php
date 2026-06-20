@@ -22,8 +22,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $greske[] = 'Naslov je obavezan i smije sadržavati najviše 100 znakova.';
     }
 
-    if ($sazetak === '' || mb_strlen($sazetak) > 100) {
-        $greske[] = 'Sažetak je obavezan i smije sadržavati najviše 100 znakova.';
+    if ($sazetak === '' || mb_strlen($sazetak) > 255) {
+        $greske[] = 'Sažetak je obavezan i smije sadržavati najviše 255 znakova.';
     }
 
     if ($tekst === '') {
@@ -117,8 +117,8 @@ $categories = mysqli_query($dbc, 'SELECT id, ime FROM kategorije ORDER BY id');
 
             <div class="form-item">
                 <label for="sazetak">Kratki sažetak <span aria-hidden="true">*</span></label>
-                <textarea name="sazetak" id="sazetak" rows="3" maxlength="100" required><?= htmlspecialchars($sazetak, ENT_QUOTES, 'UTF-8') ?></textarea>
-                <small>Najviše 100 znakova.</small>
+                <textarea name="sazetak" id="sazetak" rows="3" maxlength="255" required><?= htmlspecialchars($sazetak, ENT_QUOTES, 'UTF-8') ?></textarea>
+                <small>Najviše 255 znakova.</small>
             </div>
 
             <div class="form-item">
