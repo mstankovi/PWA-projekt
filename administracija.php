@@ -118,7 +118,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 if ($arhiva) {
                     header('Location: administracija.php?status=updated');
                 } else {
-                    header('Location: administracija.php?id=' . $articleId . '&status=updated');
+                    header('Location: clanak.php?id=' . $articleId);
                 }
                 exit;
             }

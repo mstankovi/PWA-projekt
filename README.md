@@ -2,6 +2,8 @@
 
 Newsweek portal s pregledom vijesti, registracijom, prijavom i administracijom sadržaja.
 
+[GitHub repozitorij](https://github.com/mstankovi/PWA-projekt)
+
 ## Referentni izgled
 
 Stranica je napravljena prema sljedećim primjerima početne stranice i prikaza članka.
