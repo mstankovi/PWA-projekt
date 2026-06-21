@@ -115,7 +115,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     obrisiUploadanuSliku($staraSlika);
                 }
 
-                header('Location: administracija.php?id=' . $articleId . '&status=updated');
+                if ($arhiva) {
+                    header('Location: administracija.php?status=updated');
+                } else {
+                    header('Location: administracija.php?id=' . $articleId . '&status=updated');
+                }
                 exit;
             }
 
@@ -158,6 +162,7 @@ require 'header.php';
 $categories = mysqli_query($dbc, 'SELECT id, ime FROM kategorije ORDER BY id');
 
 $statusMessages = [
+    'created' => 'Vijest je spremljena.',
     'updated' => 'Vijest je izmijenjena.',
     'deleted' => 'Vijest je izbrisana.',
 ];

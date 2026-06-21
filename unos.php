@@ -74,8 +74,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             if (mysqli_stmt_execute($insertStatement)) {
                 $newArticleId = mysqli_insert_id($dbc);
-                $redirectPage = $arhiva ? 'administracija.php' : 'clanak.php';
-                header('Location: ' . $redirectPage . '?id=' . $newArticleId);
+                if ($arhiva) {
+                    header('Location: administracija.php?status=created');
+                } else {
+                    header('Location: clanak.php?id=' . $newArticleId);
+                }
                 exit;
             }
 
